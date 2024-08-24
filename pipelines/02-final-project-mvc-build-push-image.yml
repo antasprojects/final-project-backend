@@ -23,5 +23,5 @@ stages:
         containerRegistry: 'proasacio-docker-hub'
         repository: 'proasacio/final-project-mvc'
         command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '**/docker/Dockerfile'
         tags: '$(tag)'
