@@ -7,7 +7,6 @@ ENV DB_NAME=final-project-db
 ENV DB_PASSWORD=docker
 ENV DB_PORT=5432
 COPY package*.json ./
-COPY .env ./
 RUN npm install
 COPY src/ src/
 EXPOSE 3000
