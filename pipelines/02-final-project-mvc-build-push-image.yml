@@ -25,4 +25,3 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'docker/Dockerfile'
         buildContext: '.'
-        tags: '$(tag)'

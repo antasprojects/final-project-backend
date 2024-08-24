@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   final-project-mvc:
-    image: proasacio/final-project-mvc:0.0.1.RELEASE
+    image: proasacio/final-project-mvc:latest
     ports:
       - "3000:3000"
     restart: always
@@ -11,7 +11,7 @@ services:
       - final-project-db
 
   final-project-db:
-    image: proasacio/final-project-db:0.0.1.RELEASE
+    image: proasacio/final-project-db:latest
     ports:
       - "5432:5432"
     restart: always
