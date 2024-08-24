@@ -7,6 +7,8 @@ services:
     restart: always
     networks:
       - final-project-network
+    depends_on:
+      - final-project-db
 
   final-project-db:
     image: proasacio/final-project-db:0.0.1.RELEASE
