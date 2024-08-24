@@ -1,0 +1,7 @@
+.env
+/node_modules
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+*.tfplan
+.terraform/
