@@ -44,6 +44,7 @@ stages:
         echo "SSH-ing into server"
         ssh -o StrictHostKeyChecking=no -i $(Agent.TempDirectory)/default-ec2.pem ec2-user@ec2-54-236-25-144.compute-1.amazonaws.com /bin/bash <<'EOT'
         echo "These commands will be run on: $( uname -a )"
+        cd /home/ec2-user/ansible
         touch /home/ec2-user/test-file.txt
         echo "They are executed by: $( whoami )"
         EOT
