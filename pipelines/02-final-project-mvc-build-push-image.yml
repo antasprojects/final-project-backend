@@ -47,6 +47,6 @@ stages:
         cd /home/ec2-user/ansible
         echo "Current directory: $(pwd)"
         ansible-playbook playbooks/docker-run.yml
-        echo "They are executed by: $( whoami )"
+        exit
         EOT
       displayName: 'SSH into Server'
