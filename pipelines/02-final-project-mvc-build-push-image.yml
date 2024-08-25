@@ -6,27 +6,27 @@ resources:
 - repo: self
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        containerRegistry: 'proasacio-docker-hub'
-        repository: 'proasacio/final-project-mvc'
-        command: 'buildAndPush'
-        Dockerfile: 'docker/Dockerfile'
-        buildContext: '.'
-        tags: 'latest'
+# - stage: Build
+#   displayName: Build image
+#   jobs:
+#   - job: Build
+#     displayName: Build
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#     - task: Docker@2
+#       displayName: Build an image
+#       inputs:
+#         containerRegistry: 'proasacio-docker-hub'
+#         repository: 'proasacio/final-project-mvc'
+#         command: 'buildAndPush'
+#         Dockerfile: 'docker/Dockerfile'
+#         buildContext: '.'
+#         tags: 'latest'
 
 - stage: Deploy
   displayName: Deploy to server
-  dependsOn: Build
+  # dependsOn: Build
   jobs:
   - job: Deploy
     displayName: Deploy
@@ -43,4 +43,7 @@ stages:
         chmod 400 $(Agent.TempDirectory)/default-ec2.pem
         echo "SSH-ing into server"
         ssh -o StrictHostKeyChecking=no -i $(Agent.TempDirectory)/default-ec2.pem ec2-user@ec2-54-236-25-144.compute-1.amazonaws.com
+        echo "Connected to the server"
+        touch test-file.txt
+        echo "File created"
       displayName: 'SSH into Server'
