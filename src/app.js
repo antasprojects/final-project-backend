@@ -9,7 +9,7 @@ app.use(cors())
 app.use(logger)
 
 app.get("/", (req, res) => {
-    res.send({"final-project-mvc": "healthy"})
+    res.send({"final-project-mvc": "healthy v2"})
 })
 
 
