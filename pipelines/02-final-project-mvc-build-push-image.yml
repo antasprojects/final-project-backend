@@ -28,19 +28,19 @@ stages:
   displayName: Deploy to server
   dependsOn: Build
   jobs:
-  - job: 
+  - job: Deploy
     displayName: Deploy
     pool:
       vmImage: ubuntu-latest
     steps:
     - task: DownloadSecureFile@1
-      name: sshKey
+      name: downloadSSHKey
       inputs:
         secureFile: 'default-ec2.pem'
+      
     - script: |
         echo "Setting permissions for SSH key"
-        chmod 400 $(SSH_PRIVATE_KEY)  # Ensure the private key has the correct permissions
-        ssh -o StrictHostKeyChecking=no -i $(SSH_PRIVATE_KEY) ec2-user@ec2-54-236-25-144.compute-1.amazonaws.com
-      displayName: 'SSH and Run Ansible Playbook'
-      env:
-        SSH_PRIVATE_KEY: $(sshKey)
+        chmod 400 $(Agent.TempDirectory)/default-ec2.pem
+        echo "SSH-ing into server"
+        ssh -o StrictHostKeyChecking=no -i $(Agent.TempDirectory)/default-ec2.pem ec2-user@ec2-54-236-25-144.compute-1.amazonaws.com
+      displayName: 'SSH into Server'
