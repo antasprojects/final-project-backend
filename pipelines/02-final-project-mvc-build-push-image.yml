@@ -26,7 +26,7 @@ stages:
 
 - stage: Deploy
   displayName: Deploy to server
-  # dependsOn: Build
+  dependsOn: Build
   jobs:
   - job: Deploy
     displayName: Deploy
