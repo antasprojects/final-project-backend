@@ -46,7 +46,7 @@ stages:
         echo "These commands will be run on: $( uname -a )"
         cd /home/ec2-user/ansible
         echo "Current directory: $(pwd)"
-        touch /home/ec2-user/test-file.txt
+        touch test-file.txt
         echo "They are executed by: $( whoami )"
         EOT
       displayName: 'SSH into Server'
