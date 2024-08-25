@@ -4,9 +4,14 @@
     - name: Navigate to directory containing docker-compose.yml
       shell: cd
       args:
-        chdir: /home/ec2-user
+        chdir: /home/ec2-user/docker
+
+    - name: Pull the latest Docker images
+      shell: docker-compose pull
+      args:
+        chdir: /home/ec2-user/docker
 
     - name: Run docker-compose 
-      shell: docker-compose up 
+      shell: docker-compose up -d
       args:
-        chdir: /home/ec2-user/
+        chdir: /home/ec2-user/docker
