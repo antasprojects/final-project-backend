@@ -25,6 +25,10 @@ resource "aws_instance" "http_server" {
   }
 }
 
+resource "aws_s3_bucket" "my_s3_bucket" {
+  bucket = "s3-bucket-final-project-logs-antoniszczekot"
+}
+
 variable "aws_key_pair" {
     default = "~/aws/aws_keys/default-ec2.pem"  
 }
