@@ -1,4 +1,4 @@
-const db = require("./db/connect");
+const db = require("../db/connect");
 
 class User {
   constructor({ user_id, username, password }) {
