@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const User = require("./models/User");
+const User = require("../models/User");
 
 const login = async (req, res) => {
   try {
@@ -82,4 +82,4 @@ const tokenValidation = (req, res) => {
   }
 };
 
-module.exports = { login, signup, showStats,  tokenValidation };
+module.exports = { login, signup, showStats, tokenValidation };

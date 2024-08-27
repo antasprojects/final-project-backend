@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const logger = require('./middleware/logger')
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routers/users");
 
 const app = express()
 
@@ -10,10 +10,16 @@ app.use(cors())
 app.use(logger)
 app.use("/users", usersRouter);
 
+
+
+
+
+
+
+
 app.get("/", (req, res) => {
     res.send({"final-project-mvc": "healthy v9"})
 })
-
 
 
 // This block is route for database testing can be deleted later on
