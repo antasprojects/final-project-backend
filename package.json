@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
+    "setup-db": "node ./src/db/setup.js",
     "test": "jest"
   },
   "keywords": [],
