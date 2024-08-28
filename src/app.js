@@ -18,7 +18,8 @@ app.use("/users", usersRouter);
 
 
 app.get("/", (req, res) => {
-    res.send({"final-project-mvc": "healthy v9"})
+    const server_name = process.env.SERVER_NAME || 'Local Host';
+    res.send({"final-project-backend": "healthy v9", "server-name": server_name})
 })
 
 
