@@ -14,7 +14,7 @@ const login = async (req, res) => {
 
     jwt.sign(
       { user_id: user.user_id },
-      process.env.SECRET_TOKEN,
+      process.env.SECRET_KEY,
       {
         expiresIn: 3600,
       },
@@ -44,7 +44,7 @@ const register = async (req, res) => {
 
     jwt.sign(
       { user_id: newUser.user_id },
-      process.env.SECRET_TOKEN,
+      process.env.SECRET_KEY,
       {
         expiresIn: 3600,
       },
