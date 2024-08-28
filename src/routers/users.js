@@ -4,7 +4,7 @@ const usersControllers = require("../controllers/users.js");
 
 const usersRouter = Router();
 
-usersRouter.post("/signup", usersControllers.signup);
+usersRouter.post("/register", usersControllers.register);
 usersRouter.post("/login", usersControllers.login);
 usersRouter.get("/validate-token", usersControllers.tokenValidation);
 usersRouter.get("/stats", usersControllers.showStats);
