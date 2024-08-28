@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 const db = require('./db/connect')
 app.get("/database", async (req, res) => {
     try {
-        const result = await db.query("SELECT * FROM power_rangers");
+        const result = await db.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';");
         res.json(result.rows);
     } catch (error) {
         console.error('Error executing query', error);
