@@ -35,13 +35,17 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const data = req.body;
   try {
-    console.log(req.body);
     const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS));
 
-    data.password = await bcrypt.hash(data.password, salt);
+    password_hash = await bcrypt.hash(data.password, salt);
 
-    console.log(data);
-    const newUser = await User.create(data);
+    data_with_hash = {
+      username: data.username,
+      email: data.email,
+      password_hash: password_hash
+    }
+
+    const newUser = await User.create(data_with_hash);
 
     jwt.sign(
       { user_id: newUser.user_id },

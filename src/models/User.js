@@ -1,11 +1,11 @@
 const db = require("../db/connect");
 
 class User {
-  constructor({ user_id, username, email, password }) {
+  constructor({ user_id, username, email, password_hash }) {
     this.user_id = user_id;
     this.email = email;
     this.username = username;
-    this.password = password;
+    this.password_hash = password_hash;
 
   }
 
@@ -51,13 +51,13 @@ class User {
     return new User(query.rows[0]);
   }
 
-  static async create({ username, email, password }) {
-    if (!username || !password || !email)
+  static async create({ username, email, password_hash }) {
+    if (!username || !password_hash || !email)
       throw new Error("Please provide required fields");
 
     const query = await db.query(
       "INSERT INTO users (username , email, password_hash) VALUES ($1 , $2, $3) RETURNING *",
-      [username, email, password]
+      [username, email, password_hash]
     );
 
     if (query.rows.length !== 1) {
