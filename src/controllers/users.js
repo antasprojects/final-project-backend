@@ -31,13 +31,15 @@ const login = async (req, res) => {
   }
 };
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   const data = req.body;
   try {
+    console.log(req.body);
     const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS));
 
     data.password = await bcrypt.hash(data.password, salt);
 
+    console.log(data);
     const newUser = await User.create(data);
 
     jwt.sign(
@@ -82,4 +84,4 @@ const tokenValidation = (req, res) => {
   }
 };
 
-module.exports = { login, signup, showStats, tokenValidation };
+module.exports = { login, register, showStats, tokenValidation };

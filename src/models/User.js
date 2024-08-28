@@ -3,6 +3,7 @@ const db = require("../db/connect");
 class User {
   constructor({ user_id, username, password }) {
     this.user_id = user_id;
+    this.email = email;
     this.username = username;
     this.password = password;
 
@@ -21,6 +22,21 @@ class User {
     return new User(query.rows[0]);
   }
 
+  static async findByEmail(email) {
+    if (!email) throw new Error("Please provide an email");
+
+    const query = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    if (query.rows.length !== 1) {
+      throw new Error("Unable to authenticate user");
+    }
+    return new User(query.rows[0]);
+  }
+
+
+
   static async findById(id) {
     if (!id) throw new Error("Please provide an id");
 
@@ -35,13 +51,13 @@ class User {
     return new User(query.rows[0]);
   }
 
-  static async create({ username, password }) {
-    if (!username || !password)
+  static async create({ username, email, password }) {
+    if (!username || !password || !email)
       throw new Error("Please provide required fields");
 
     const query = await db.query(
-      "INSERT INTO users (username , password ) VALUES ($1 , $2) RETURNING *",
-      [username, password]
+      "INSERT INTO users (username , email, password) VALUES ($1 , $2) RETURNING *",
+      [username, email, password]
     );
 
     if (query.rows.length !== 1) {
