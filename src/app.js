@@ -2,13 +2,18 @@ const express = require("express")
 const cors = require("cors")
 const logger = require('./middleware/logger')
 const usersRouter = require("./routers/users");
+const locationsRouter = require("./routers/locations");
+
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
 app.use(logger)
+
 app.use("/users", usersRouter);
+app.use("/locations", locationsRouter);
+
 
 
 
