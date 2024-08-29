@@ -1,7 +1,5 @@
 const Location = require("../models/Location");
 
-const apiKey = "f28598b6360194cde8e1849daeaca239"
-
 
 
 async function show(req, res) {
@@ -25,7 +23,7 @@ async function showImages(req, res) {
 
     
 
-    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&text=${encodeURIComponent(name)}&safe_search=1&format=json&nojsoncallback=1&per_page=${perPage}`;
+    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&text=${encodeURIComponent(name)}&safe_search=1&format=json&nojsoncallback=1&per_page=${perPage}`;
     const flickr_response = await fetch(url);
 
     if (!flickr_response.ok) {
