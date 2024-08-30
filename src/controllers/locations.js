@@ -108,10 +108,10 @@ async function showWeather(req, res) {
     try {
       const data = req.body;
 
-      const locations = Location.getFiltered(data.user_location, data.tags, data.filter_distance)
+      const locations = await Location.getFiltered(data.user_location, data.tags, data.filter_distance)
 
 
-      res.status(200).json(data);
+      res.status(200).json(locations);
     } catch (err) {
       res.status(404).json({ "error": err.message })
     }
