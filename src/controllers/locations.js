@@ -104,6 +104,22 @@ async function showWeather(req, res) {
 
 
 
+  async function showFiltered(req, res) {
+    try {
+      const data = req.body;
+
+      const locations = await Location.getFiltered(data.user_location, data.tags, data.filter_distance)
+
+
+      res.status(200).json(locations);
+    } catch (err) {
+      res.status(404).json({ "error": err.message })
+    }
+  }
+
+
+
+
   module.exports = {
-    show, showImages, showWeather
+    show, showImages, showWeather, showFiltered
   }
