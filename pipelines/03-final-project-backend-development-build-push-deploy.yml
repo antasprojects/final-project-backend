@@ -1,0 +1,54 @@
+
+trigger:
+  branches:
+    include:
+      - development
+
+resources:
+- repo: self
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'proasacio-docker-hub'
+        repository: 'proasacio/final-project-mvc-development'
+        command: 'buildAndPush'
+        Dockerfile: 'docker/Dockerfile'
+        buildContext: '.'
+        tags: 'latest'
+
+- stage: Deploy
+  displayName: Deploy to server
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DownloadSecureFile@1
+      name: downloadSSHKey
+      inputs:
+        secureFile: 'default-ec2.pem'
+      
+    - script: |
+        echo "Setting permissions for SSH key"
+        chmod 400 $(Agent.TempDirectory)/default-ec2.pem
+        echo "SSH-ing into server"
+        ssh -o StrictHostKeyChecking=no -i $(Agent.TempDirectory)/default-ec2.pem ec2-user@ec2-54-89-47-53.compute-1.amazonaws.com /bin/bash <<'EOT'
+        echo "These commands will be run on: $( uname -a )"
+        cd /home/ec2-user/ansible
+        echo "Current directory: $(pwd)"
+        ansible-playbook playbooks/docker-run.yml
+        exit
+        EOT
+      displayName: 'SSH into Server'
