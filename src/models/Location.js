@@ -15,11 +15,8 @@ class Location {
         this.longitude = longitude;
         this.rating = rating;
         this.address = address;
-        this.phone_number = phone_number;
-        this.website_url = website_url;
         this.image_url = image_url;
-        this.opening_hours = opening_hours;
-        this.tags = tags
+        this.tag_id = tag_id
       }
       
 
@@ -32,19 +29,14 @@ class Location {
         throw new Error("Unable to locate location.")
       }
 
-      const response_tags = await db.query("SELECT tag_name FROM tags WHERE place_id = $1;", [id]);
+      const response_tag = await db.query("SELECT tag_name FROM tags WHERE tag_id = $1;", [response.rows[0].tag_id]);
 
 
-      if (response_tags.rows.length == 0) {
+      if (response_tag.rows.length == 0) {
         throw new Error("Unable to locate tags.")
       }
 
-      const tag_names = response_tags.rows.map(tag => tag.tag_name);
-
-      response.rows[0].tags = tag_names
-
-  
-      return new Location(response.rows[0]);
+      return response.rows[0];
     }
 
 

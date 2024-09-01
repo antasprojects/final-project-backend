@@ -18,17 +18,14 @@ async function showImages(req, res) {
   try {
     const id = parseInt(req.params.id);
     const location = await Location.getOneById(id);
-    const name = location.name
+    let name = location.name
     const perPage = 5
     
+    name = encodeURIComponent(name.replace(" ","").toLowerCase())
     console.log(name);
 
-    
+    const tags = [name, 'landscape', 'nature']
 
-    // const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${encodeURIComponent(name)}&tag_mode=all&safe_search=1&format=json&nojsoncallback=1&per_page=${perPage}`;
-    // const flickr_response = await fetch(url);
-  
-    const tags = `${encodeURIComponent(name.replace(" ","").toLowerCase())}, nature, landscape`;
     console.log("tags: ", tags);
     const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${tags}&tag_mode=all&safe_search=1&sort=relevance&format=json&nojsoncallback=1&per_page=${perPage}`
     console.log(url);
