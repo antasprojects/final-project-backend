@@ -86,7 +86,7 @@ class Location {
   static async getRecommendations(id) {
     try {
       const response = await db.query(`
-        SELECT name, description, address, phone_number 
+        SELECT name, description, address 
         FROM green_places
         WHERE place_id = $1;
       `, [id]);
@@ -97,13 +97,12 @@ class Location {
       }
   
       const recommendations = response.rows.map((location) => {
-        const { name, description, address, phone_number } = location;
+        const { name, description, address } = location;
   
         return {
           name,
           description: description || 'No description available',
-          address: address || 'No address available',
-          phone_number: phone_number || 'No phone number available',
+          address: address || 'No address available'
         };
       });
   
