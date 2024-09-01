@@ -20,6 +20,7 @@ app.use("/locations", locationsRouter);
 app.use('/name', interestingFactsRouter);
 
 
+
 app.get("/", (req, res) => {
     const server_name = process.env.SERVER_NAME || 'Local Host';
     res.send({"final-project-backend": "healthy v9", "server-name": server_name})

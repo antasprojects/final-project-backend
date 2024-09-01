@@ -20,11 +20,20 @@ async function showImages(req, res) {
     const location = await Location.getOneById(id);
     const name = location.name
     const perPage = 5
+    
+    console.log(name);
 
     
 
-    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&text=${encodeURIComponent(name)}&safe_search=1&format=json&nojsoncallback=1&per_page=${perPage}`;
-    const flickr_response = await fetch(url);
+    // const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${encodeURIComponent(name)}&tag_mode=all&safe_search=1&format=json&nojsoncallback=1&per_page=${perPage}`;
+    // const flickr_response = await fetch(url);
+  
+    const tags = `${encodeURIComponent(name.replace(" ","").toLowerCase())}, nature, landscape`;
+    console.log("tags: ", tags);
+    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${tags}&tag_mode=all&safe_search=1&sort=relevance&format=json&nojsoncallback=1&per_page=${perPage}`
+    console.log(url);
+    const flickr_response = await fetch(url)
+
 
     if (!flickr_response.ok) {
       throw new Error(`Flickr API request failed with status ${flickr_response.status}`);
@@ -34,6 +43,9 @@ async function showImages(req, res) {
   
     const photoUrls = data.photos.photo.map(photo => {
       const { id, server, farm, secret } = photo;
+
+      console.log(id, server, farm, secret);
+
       return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
     });
 
@@ -92,6 +104,22 @@ async function showWeather(req, res) {
 
 
 
+  async function showFiltered(req, res) {
+    try {
+      const data = req.body;
+
+      const locations = await Location.getFiltered(data.user_location, data.tags, data.filter_distance)
+
+
+      res.status(200).json(locations);
+    } catch (err) {
+      res.status(404).json({ "error": err.message })
+    }
+  }
+
+
+
+
   module.exports = {
-    show, showImages, showWeather
+    show, showImages, showWeather, showFiltered
   }
