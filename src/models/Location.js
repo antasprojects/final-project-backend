@@ -83,36 +83,45 @@ class Location {
     return result.rows;
   }
 
-  static async getRecommendations(id) {
+  static async getRecommendations(user_location) {
     try {
-      const response = await db.query(`
-        SELECT name, description, address 
+      const { latitude, longitude } = user_location;
+      const { latMin, latMax, lonMin, lonMax } = getBoundaries(latitude, longitude, 20); // 20 km radius
+
+      const query = `
+        SELECT name, description, address, rating 
         FROM green_places
-        WHERE place_id = $1;
-      `, [id]);
-  
+        WHERE latitude BETWEEN $1 AND $2
+        AND longitude BETWEEN $3 AND $4
+        ORDER BY rating DESC
+        LIMIT 5;
+      `;
+
+      const queryParams = [latMin, latMax, lonMin, lonMax];
+      const response = await db.query(query, queryParams);
+
       if (response.rows.length === 0) {
-        console.log(`No recommendations found for place_id: ${id}`);
+        console.log(`No recommendations found for the given location.`);
         return [];
       }
-  
+
       const recommendations = response.rows.map((location) => {
-        const { name, description, address } = location;
-  
+        const { name, description, address, rating } = location;
+
         return {
           name,
           description: description || 'No description available',
-          address: address || 'No address available'
+          address: address || 'No address available',
+          rating: rating || 'No rating available',
         };
       });
-  
+
       return recommendations;
     } catch (err) {
-      console.error("Error executing getRecommendations query:", err); // Log the exact error
+      console.error("Error executing getRecommendations query:", err);
       throw new Error("Error retrieving location recommendations: " + err.message);
     }
   }
 }
-
 
 module.exports = Location;

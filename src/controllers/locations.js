@@ -94,11 +94,11 @@ async function showFiltered(req, res) {
 
 async function showRecommendations(req, res) {
   try {
-    const id = parseInt(req.params.id);
-    const recommendations = await Location.getRecommendations(id);
+    const user_location = req.body.user_location;
+    const recommendations = await Location.getRecommendations(user_location);
     res.status(200).json({ recommendations });
   } catch (err) {
-    res.status(500).json({ "error": "Cannot retrive location recommendations: " + err.message });
+    res.status(500).json({ "error": "Cannot retrieve location recommendations: " + err.message });
   }
 }
 
