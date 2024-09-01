@@ -2,41 +2,37 @@ const db = require("../db/connect");
 const { getBoundaries } = require("./helpers.js");
 
 class Location {
-  constructor({
-    place_id,
-    name,
-    location_type,
-    description,
-    latitude,
-    longitude,
-    rating,
-    address,
-    phone_number,
-    website_url,
-    image_url,
-    opening_hours,
-    tags,
-  }) {
-    this.place_id = place_id;
-    this.name = name;
-    this.location_type = location_type;
-    this.description = description;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.rating = rating;
-    this.address = address;
-    this.phone_number = phone_number;
-    this.website_url = website_url;
-    this.image_url = image_url;
-    this.opening_hours = opening_hours;
-    this.tags = tags;
-  }
+      constructor({place_id, name, location_type, description, latitude, longitude, rating, address, phone_number, website_url, image_url, opening_hours, tags }) {
+        this.place_id = place_id;
+        this.name = name;
+        this.location_type = location_type;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.rating = rating;
+        this.address = address;
+        this.image_url = image_url;
+        this.tag_id = tag_id
+      }
+      
 
-  static async getOneById(id) {
-    const response = await db.query("SELECT * FROM green_places WHERE place_id = $1;", [id]);
 
-    if (response.rows.length != 1) {
-      throw new Error("Unable to locate location.");
+    static async getOneById(id) {
+      const response = await db.query("SELECT * FROM green_places WHERE place_id = $1;", [id]);
+
+
+      if (response.rows.length != 1) {
+        throw new Error("Unable to locate location.")
+      }
+
+      const response_tag = await db.query("SELECT tag_name FROM tags WHERE tag_id = $1;", [response.rows[0].tag_id]);
+
+
+      if (response_tag.rows.length == 0) {
+        throw new Error("Unable to locate tags.")
+      }
+
+      return response.rows[0];
     }
 
     const response_tags = await db.query("SELECT tag_name FROM tags WHERE place_id = $1;", [id]);
