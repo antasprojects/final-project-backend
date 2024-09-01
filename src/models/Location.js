@@ -83,21 +83,22 @@ class Location {
     return result.rows;
   }
 
-  // New function to get recommendations
-  static async getRecommendations() {
+  static async getRecommendations(id) {
     try {
       const response = await db.query(`
         SELECT name, description, address, phone_number 
-        FROM green_places;
-      `);
-
+        FROM green_places
+        WHERE place_id = $1;
+      `, [id]);
+  
       if (response.rows.length === 0) {
+        console.log(`No recommendations found for place_id: ${id}`);
         return [];
       }
-
+  
       const recommendations = response.rows.map((location) => {
         const { name, description, address, phone_number } = location;
-
+  
         return {
           name,
           description: description || 'No description available',
@@ -105,12 +106,14 @@ class Location {
           phone_number: phone_number || 'No phone number available',
         };
       });
-
+  
       return recommendations;
     } catch (err) {
+      console.error("Error executing getRecommendations query:", err); // Log the exact error
       throw new Error("Error retrieving location recommendations: " + err.message);
     }
   }
 }
+
 
 module.exports = Location;

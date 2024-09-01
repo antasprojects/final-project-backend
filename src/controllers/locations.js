@@ -92,15 +92,16 @@ async function showFiltered(req, res) {
   }
 }
 
-// New controller function for recommendations
 async function showRecommendations(req, res) {
   try {
-    const recommendations = await Location.getRecommendations();
+    const id = parseInt(req.params.id);
+    const recommendations = await Location.getRecommendations(id);
     res.status(200).json({ recommendations });
   } catch (err) {
-    res.status(500).json({ "error": err.message });
+    res.status(500).json({ "error": "Cannot retrive location recommendations: " + err.message });
   }
 }
+
 
 module.exports = {
   show,
