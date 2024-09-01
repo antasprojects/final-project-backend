@@ -9,7 +9,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
-//app.use(logger)
+app.use(logger)
 
 app.use("/users", usersRouter);
 app.use("/locations", locationsRouter);
