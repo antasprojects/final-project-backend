@@ -18,7 +18,9 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1682.0",
+    "@google/generative-ai": "^0.17.1",
+    "aws-sdk": "^2.1686.0",
+    "axios": "^1.7.6",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
