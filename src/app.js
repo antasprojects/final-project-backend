@@ -1,18 +1,23 @@
 const express = require("express")
 const cors = require("cors")
-//const logger = require('./middleware/logger')
+const logger = require('./middleware/logger')
 const usersRouter = require("./routers/users");
 const locationsRouter = require("./routers/locations");
+const interestingFactsRouter = require("./routers/interestingFacts.js");
+
+// Log the GEMINI_API_KEY to ensure it's loaded
+console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
 
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
-//app.use(logger)
+app.use(logger)
 
 app.use("/users", usersRouter);
 app.use("/locations", locationsRouter);
+app.use('/name', interestingFactsRouter);
 
 
 

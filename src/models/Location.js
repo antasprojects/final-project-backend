@@ -2,61 +2,43 @@ const db = require("../db/connect");
 const { getBoundaries } = require("./helpers.js");
 
 class Location {
-  constructor({
-    place_id,
-    name,
-    location_type,
-    description,
-    latitude,
-    longitude,
-    rating,
-    address,
-    phone_number,
-    website_url,
-    image_url,
-    opening_hours,
-    tags,
-  }) {
-    this.place_id = place_id;
-    this.name = name;
-    this.location_type = location_type;
-    this.description = description;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.rating = rating;
-    this.address = address;
-    this.phone_number = phone_number;
-    this.website_url = website_url;
-    this.image_url = image_url;
-    this.opening_hours = opening_hours;
-    this.tags = tags;
-  }
-
+    constructor({place_id, name, location_type, description, latitude, longitude, rating, address, image_url, tag_id }) {
+      this.place_id = place_id;
+      this.name = name;
+      this.location_type = location_type;
+      this.description = description;
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.rating = rating;
+      this.address = address;
+      this.image_url = image_url;
+      this.tag_id = tag_id
+    }
+      
   static async getOneById(id) {
     const response = await db.query("SELECT * FROM green_places WHERE place_id = $1;", [id]);
 
+
     if (response.rows.length != 1) {
-      throw new Error("Unable to locate location.");
+      throw new Error("Unable to locate location.")
     }
 
-    const response_tags = await db.query("SELECT tag_name FROM tags WHERE place_id = $1;", [id]);
+    const response_tag = await db.query("SELECT tag_name FROM tags WHERE tag_id = $1;", [response.rows[0].tag_id]);
 
-    if (response_tags.rows.length == 0) {
-      throw new Error("Unable to locate tags.");
+
+    if (response_tag.rows.length == 0) {
+      throw new Error("Unable to locate tags.")
     }
 
-    const tag_names = response_tags.rows.map((tag) => tag.tag_name);
-
-    response.rows[0].tags = tag_names;
-
-    return new Location(response.rows[0]);
+    return response.rows[0];
   }
 
+
   static async getFiltered(user_location, tags, filter_distance) {
+
     const { latitude, longitude } = user_location;
     const activeTags = Object.keys(tags).filter((tag) => tags[tag]);
     const { latMin, latMax, lonMin, lonMax } = getBoundaries(latitude, longitude, filter_distance);
-
     let query;
     let queryParams = [latMin, latMax, lonMin, lonMax];
 
@@ -68,8 +50,8 @@ class Location {
         WHERE p.latitude BETWEEN $1 AND $2
         AND p.longitude BETWEEN $3 AND $4
         AND t.tag_name = ANY($5::text[]);`;
-
       queryParams.push(activeTags);
+
     } else {
       query = `
         SELECT DISTINCT p.* 
@@ -120,6 +102,35 @@ class Location {
     } catch (err) {
       console.error("Error executing getRecommendations query:", err);
       throw new Error("Error retrieving location recommendations: " + err.message);
+    }
+  }
+
+  static async addDescription(description, id) {
+    try {
+        const query = `
+            UPDATE green_places
+            SET description = $1
+            WHERE place_id = $2;
+        `;
+
+        await db.query(query, [description, id]);
+
+    } catch (err) {
+        throw new Error("Error adding location description: " + err.message);
+    }
+  }
+
+  static async addImageUrl(imageUrls, id) {
+    try {
+        const query = `
+            UPDATE green_places
+            SET image_url = $1
+            WHERE place_id = $2;
+        `;
+        await db.query(query, [imageUrls, id]);
+
+    } catch (err) {
+        throw new Error("Error adding location description: " + err.message);
     }
   }
 }

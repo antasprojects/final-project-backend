@@ -1,4 +1,5 @@
 const Location = require("../models/Location");
+const {fetchDescription} = require("./interestingFacts.js")
 
 async function show(req, res) {
   try {
@@ -14,13 +15,18 @@ async function showImages(req, res) {
   try {
     const id = parseInt(req.params.id);
     const location = await Location.getOneById(id);
-    const name = location.name;
-    const perPage = 5;
+    let name = location.name
+    const perPage = 5
+    
+    name = encodeURIComponent(name.replace(" ","").toLowerCase())
+    // console.log(name);
 
-    const tags = `${encodeURIComponent(name.replace(" ", "").toLowerCase())}, nature, landscape`;
-    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${tags}&tag_mode=all&safe_search=1&sort=relevance&format=json&nojsoncallback=1&per_page=${perPage}`;
+    const tags = [name, 'landscape', 'nature']
 
-    const flickr_response = await fetch(url);
+    // console.log("tags: ", tags);
+    const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${tags}&tag_mode=all&safe_search=1&sort=relevance&format=json&nojsoncallback=1&per_page=${perPage}`
+    // console.log(url);
+    const flickr_response = await fetch(url)
 
     if (!flickr_response.ok) {
       throw new Error(`Flickr API request failed with status ${flickr_response.status}`);
@@ -102,11 +108,86 @@ async function showRecommendations(req, res) {
   }
 }
 
+async function showImage(req, res) {
+
+  const id = parseInt(req.params.id);
+  const location = await Location.getOneById(id);
+
+  if (!location) {
+    res.status(404).json({ "error": err.message });
+    }
+
+  if (location.image_url){
+    res.status(200).json(location.image_url)
+  }
+  else {
+
+    try {
+      // console.log(location.name);
+      const response = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(location.name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
+      const data = await response.json();
+      // console.log(data);
+
+      if (!data.items || data.items.length === 0) {
+        return res.status(404).json({ error: 'No images found' });
+      }
+
+
+      const imageUrls = data.items.map(item => item.link);
+
+      await Location.addImageUrl(imageUrls, id)
+
+      // console.log(imageUrls);
+
+
+
+      res.status(200).json(imageUrls)
+
+    } catch (error) {
+        console.error('Error fetching images from Google API:', error);
+      if (!res.headersSent) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+    }
+  }
+  
+
+
+}
+
+
+async function showDescription(req, res) {
+  const id = parseInt(req.params.id);
+  const location = await Location.getOneById(id);
+
+  if (!location) {
+    res.status(404).json({ "error": err.message });
+    }
+
+  if (location.description) {
+    res.status(200).json(location.description)
+  }
+  else {
+    const description = await fetchDescription(location)
+
+    await Location.addDescription(description, id)
+
+    res.status(200).json(description)
+    
+  }
+
+}
+
+
+
+
 
 module.exports = {
   show,
   showImages,
+  showImage,
   showWeather,
   showFiltered,
-  showRecommendations
+  showRecommendations,
+  showDescription
 };
