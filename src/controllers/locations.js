@@ -19,13 +19,13 @@ async function showImages(req, res) {
     const perPage = 5
     
     name = encodeURIComponent(name.replace(" ","").toLowerCase())
-    console.log(name);
+    // console.log(name);
 
     const tags = [name, 'landscape', 'nature']
 
-    console.log("tags: ", tags);
+    // console.log("tags: ", tags);
     const url = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${process.env.FLICKR_API_KEY}&tags=${tags}&tag_mode=all&safe_search=1&sort=relevance&format=json&nojsoncallback=1&per_page=${perPage}`
-    console.log(url);
+    // console.log(url);
     const flickr_response = await fetch(url)
 
     if (!flickr_response.ok) {
@@ -108,7 +108,7 @@ async function showRecommendations(req, res) {
   }
 }
 
-async function showImagesProxy(req, res) {
+async function showImage(req, res) {
 
   const id = parseInt(req.params.id);
   const location = await Location.getOneById(id);
@@ -117,27 +117,42 @@ async function showImagesProxy(req, res) {
     res.status(404).json({ "error": err.message });
     }
 
-  try {
-    console.log(location.name);
-    const response = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(location.name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
-    const data = await response.json();
-    console.log(data);
+  if (location.image_url){
+    res.status(200).json(location.image_url)
+  }
+  else {
 
-    if (!data.items || data.items.length === 0) {
-      return res.status(404).json({ error: 'No images found' });
-    }
+    try {
+      // console.log(location.name);
+      const response = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(location.name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
+      const data = await response.json();
+      // console.log(data);
+
+      if (!data.items || data.items.length === 0) {
+        return res.status(404).json({ error: 'No images found' });
+      }
 
 
-    const imageUrls = data.items.map(item => item.link);
-    console.log(imageUrls);
-    return res.json(imageUrls);
+      const imageUrls = data.items.map(item => item.link);
 
-  } catch (error) {
-      console.error('Error fetching images from Google API:', error);
-    if (!res.headersSent) {
-      return res.status(500).json({ error: 'Internal Server Error' });
+      await Location.addImageUrl(imageUrls, id)
+
+      // console.log(imageUrls);
+
+
+
+      res.status(200).json(imageUrls)
+
+    } catch (error) {
+        console.error('Error fetching images from Google API:', error);
+      if (!res.headersSent) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
     }
   }
+  
+
+
 }
 
 
@@ -170,7 +185,7 @@ async function showDescription(req, res) {
 module.exports = {
   show,
   showImages,
-  showImagesProxy,
+  showImage,
   showWeather,
   showFiltered,
   showRecommendations,

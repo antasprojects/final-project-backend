@@ -6,7 +6,7 @@ const locationsRouter = Router();
 
 locationsRouter.get("/data/:id", locationsController.show);
 locationsRouter.get("/images/:id", locationsController.showImages);
-locationsRouter.get("/image/:id", locationsController.showImagesProxy);
+locationsRouter.get("/image/:id", locationsController.showImage);
 locationsRouter.get("/description/:id", locationsController.showDescription)
 locationsRouter.get("/weather/:id", locationsController.showWeather);
 locationsRouter.post("/filter", locationsController.showFiltered);

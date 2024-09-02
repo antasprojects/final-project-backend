@@ -119,6 +119,20 @@ class Location {
         throw new Error("Error adding location description: " + err.message);
     }
   }
+
+  static async addImageUrl(imageUrls, id) {
+    try {
+        const query = `
+            UPDATE green_places
+            SET image_url = $1
+            WHERE place_id = $2;
+        `;
+        await db.query(query, [imageUrls, id]);
+
+    } catch (err) {
+        throw new Error("Error adding location description: " + err.message);
+    }
+  }
 }
 
 module.exports = Location;
