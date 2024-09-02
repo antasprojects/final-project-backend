@@ -2,7 +2,7 @@
 
 
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
-const InterestingFact = require('../models/InterestingFact');
+const InterestingFact = require("../models/InterestingFact");
 require('dotenv').config();
 
 const MODEL_NAME = 'gemini-1.5-pro';
