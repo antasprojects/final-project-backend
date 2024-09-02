@@ -2,18 +2,18 @@ const db = require("../db/connect");
 const { getBoundaries } = require("./helpers.js");
 
 class Location {
-  constructor({place_id, name, location_type, description, latitude, longitude, rating, address, image_url, tag_id }) {
-    this.place_id = place_id;
-    this.name = name;
-    this.location_type = location_type;
-    this.description = description;
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.rating = rating;
-    this.address = address;
-    this.image_url = image_url;
-    this.tag_id = tag_id
-  }
+    constructor({place_id, name, location_type, description, latitude, longitude, rating, address, image_url, tag_id }) {
+      this.place_id = place_id;
+      this.name = name;
+      this.location_type = location_type;
+      this.description = description;
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.rating = rating;
+      this.address = address;
+      this.image_url = image_url;
+      this.tag_id = tag_id
+    }
       
   static async getOneById(id) {
     const response = await db.query("SELECT * FROM green_places WHERE place_id = $1;", [id]);
@@ -102,6 +102,21 @@ class Location {
     } catch (err) {
       console.error("Error executing getRecommendations query:", err);
       throw new Error("Error retrieving location recommendations: " + err.message);
+    }
+  }
+
+  static async addDescription(description, id) {
+    try {
+        const query = `
+            UPDATE green_places
+            SET description = $1
+            WHERE place_id = $2;
+        `;
+
+        await db.query(query, [description, id]);
+
+    } catch (err) {
+        throw new Error("Error adding location description: " + err.message);
     }
   }
 }

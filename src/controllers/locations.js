@@ -1,4 +1,5 @@
 const Location = require("../models/Location");
+const {fetchDescription} = require("./interestingFacts.js")
 
 async function show(req, res) {
   try {
@@ -107,7 +108,6 @@ async function showRecommendations(req, res) {
   }
 }
 
-
 async function showImagesProxy(req, res) {
 
   const id = parseInt(req.params.id);
@@ -141,11 +141,38 @@ async function showImagesProxy(req, res) {
 }
 
 
+async function showDescription(req, res) {
+  const id = parseInt(req.params.id);
+  const location = await Location.getOneById(id);
+
+  if (!location) {
+    res.status(404).json({ "error": err.message });
+    }
+
+  if (location.description) {
+    res.status(200).json(location.description)
+  }
+  else {
+    const description = await fetchDescription(location)
+
+    await Location.addDescription(description, id)
+
+    res.status(200).json(description)
+    
+  }
+
+}
+
+
+
+
+
 module.exports = {
   show,
   showImages,
   showImagesProxy,
   showWeather,
   showFiltered,
-  showRecommendations
+  showRecommendations,
+  showDescription
 };
