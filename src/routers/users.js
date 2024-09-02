@@ -8,7 +8,7 @@ const usersRouter = Router();
 usersRouter.post("/register", usersControllers.register);
 usersRouter.post("/login", usersControllers.login);
 usersRouter.get("/validate-token", usersControllers.tokenValidation);
-usersRouter.get("/stats", usersControllers.showStats);
+usersRouter.get("/stats", authenticator, usersControllers.showStats);
 
 // New routes for saving and retrieving locations
 usersRouter.post("/save", authenticator, usersControllers.saveLocation);
