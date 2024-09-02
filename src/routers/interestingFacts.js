@@ -4,7 +4,7 @@ const router = express.Router();
 
 const factController = require('../controllers/interestingFacts.js');
 
-router.post('/getFacts', factController.getFacts);
+router.post('/getFacts/:id', factController.getFacts);
 router.get('/getInfoById/:id', factController.getInfoById);
 
 module.exports = router;
