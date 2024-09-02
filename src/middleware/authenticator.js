@@ -1,18 +1,22 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
-function authenticator(req, res, next){
+function authenticator(req, res, next) {
     const token = req.headers['authorization'];
+    console.log('Token Received:', token);
 
     if (token) {
-        jwt.verify(token, process.env.SECRET_TOKEN, async (err, data) => {
-            if(err){
-                res.status(403).json({ err: 'Invalid token' })
+        jwt.verify(token.split(' ')[1], process.env.SECRET_KEY, (err, decoded) => {
+            if (err) {
+                console.error('Token Verification Error:', err);
+                res.status(403).json({ error: 'Invalid token' });
             } else {
-                next();
+                console.log('Decoded Token:', decoded);
+                req.user_id = decoded.user_id;  // Attach the user_id to the request object
+                next();  // Proceed to the next middleware or route handler
             }
-        })
+        });
     } else {  
-        res.status(403).json({ err: 'Missing token' })
+        res.status(403).json({ error: 'Missing token' });
     }
 }
 

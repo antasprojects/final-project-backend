@@ -66,6 +66,26 @@ class User {
 
     return new User(query.rows[0]);
   }
+
+  static async getSavedLocations(user_id) {
+    const query = `
+        SELECT gp.* 
+        FROM Saved_places sp 
+        JOIN Green_Places gp ON sp.place_id = gp.place_id 
+        WHERE sp.user_id = $1;
+    `;
+    const result = await db.query(query, [user_id]);
+    return result.rows;
+}
+
+  static async saveLocation(user_id, place_id) {
+    const query = `
+        INSERT INTO Saved_places (user_id, place_id) 
+        VALUES ($1, $2)
+        ON CONFLICT DO NOTHING;
+    `;
+    await db.query(query, [user_id, place_id]);
+}
 }
 
 module.exports = User;
