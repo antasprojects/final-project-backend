@@ -108,9 +108,43 @@ async function showRecommendations(req, res) {
 }
 
 
+async function showImagesProxy(req, res) {
+
+  const id = parseInt(req.params.id);
+  const location = await Location.getOneById(id);
+
+  if (!location) {
+    res.status(404).json({ "error": err.message });
+    }
+
+  try {
+    console.log(location.name);
+    const response = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(location.name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
+    const data = await response.json();
+    console.log(data);
+
+    if (!data.items || data.items.length === 0) {
+      return res.status(404).json({ error: 'No images found' });
+    }
+
+
+    const imageUrls = data.items.map(item => item.link);
+    console.log(imageUrls);
+    return res.json(imageUrls);
+
+  } catch (error) {
+      console.error('Error fetching images from Google API:', error);
+    if (!res.headersSent) {
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+}
+
+
 module.exports = {
   show,
   showImages,
+  showImagesProxy,
   showWeather,
   showFiltered,
   showRecommendations
