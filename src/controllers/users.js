@@ -71,12 +71,10 @@ const register = async (req, res) => {
 
 const showStats = async (req, res) => {
   try {
-    const user = await User.findById(req.user);
-    res
-      .status(200)
-      .json({ username: user.username});
+      const user = await User.findById(req.user_id);  // Retrieve user_id from the request object
+      res.status(200).json({ username: user.username });
   } catch (err) {
-    res.status(404).json({ error: err.message });
+      res.status(404).json({ error: err.message });
   }
 };
 
@@ -89,4 +87,27 @@ const tokenValidation = (req, res) => {
   }
 };
 
-module.exports = { login, register, showStats, tokenValidation };
+// Controller to save a location
+const saveLocation = async (req, res) => {
+  try {
+      const user_id = req.user_id; // Retrieve user_id from the request object
+      const { place_id } = req.body; // Get place_id from the request body
+      await User.saveLocation(user_id, place_id);
+      res.status(201).json({ message: 'Location saved successfully' });
+  } catch (err) {
+      res.status(500).json({ error: 'Failed to save location' });
+  }
+};
+
+// Controller to get saved locations for a user
+const getSavedLocations = async (req, res) => {
+  try {
+      const user_id = req.user_id;  // Retrieve user_id from the request object
+      const savedLocations = await User.getSavedLocations(user_id);
+      res.status(200).json({ savedLocations });
+  } catch (err) {
+      res.status(500).json({ error: 'Failed to retrieve saved locations' });
+  }
+};
+
+module.exports = { login, register, showStats, tokenValidation, saveLocation, getSavedLocations };
