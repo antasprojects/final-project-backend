@@ -38,26 +38,30 @@ class Location {
 
     const { latitude, longitude } = user_location;
     const activeTags = Object.keys(tags).filter((tag) => tags[tag]);
+
     const { latMin, latMax, lonMin, lonMax } = getBoundaries(latitude, longitude, filter_distance);
     let query;
     let queryParams = [latMin, latMax, lonMin, lonMax];
 
+
+    const tag_list = ['Woods', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
+    const index = tag_list.indexOf(activeTags[0]);
+
     if (activeTags.length > 0) {
       query = `
-        SELECT DISTINCT p.*
-        FROM green_places p
-        JOIN tags t ON p.place_id = t.place_id
-        WHERE p.latitude BETWEEN $1 AND $2
-        AND p.longitude BETWEEN $3 AND $4
-        AND t.tag_name = ANY($5::text[]);`;
-      queryParams.push(activeTags);
+        SELECT DISTINCT *
+        FROM green_places
+        WHERE latitude BETWEEN $1 AND $2
+        AND longitude BETWEEN $3 AND $4
+        AND tag_id = $5;`;
+      queryParams.push(index);
 
     } else {
       query = `
-        SELECT DISTINCT p.* 
-        FROM green_places p
-        WHERE p.latitude BETWEEN $1 AND $2 
-        AND p.longitude BETWEEN $3 AND $4;`;
+        SELECT DISTINCT * 
+        FROM green_places
+        WHERE latitude BETWEEN $1 AND $2 
+        AND longitude BETWEEN $3 AND $4;`;
     }
 
     const result = await db.query(query, queryParams);
