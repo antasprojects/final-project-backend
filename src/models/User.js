@@ -67,6 +67,32 @@ class User {
     return new User(query.rows[0]);
   }
 
+  static async destroy({ user_id, email }) {
+    if (!user_id && !email) throw new Error("Please provide a user_id or email");
+
+    const query = {
+      text: "DELETE FROM users WHERE",
+      values: [],
+    };
+
+    if (user_id) {
+      query.text += " user_id = $1";
+      query.values.push(user_id);
+    } else if (email) {
+      query.text += " email = $1";
+      query.values.push(email);
+    }
+
+    const result = await db.query(query.text, query.values);
+
+    if (result.rowCount !== 1) {
+      throw new Error("Unable to delete user");
+    }
+
+    return true; // Return true on successful deletion
+  }
+
+
   static async getSavedLocations(user_id) {
     const query = `
         SELECT gp.* 
@@ -108,6 +134,8 @@ class User {
       const result = await db.query(query, [user_id]);
       return result.rows;
     }
+
+    
 }
 
 module.exports = User;
