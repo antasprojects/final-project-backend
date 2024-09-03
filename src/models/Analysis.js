@@ -66,10 +66,60 @@ ORDER BY
     return rows;
 };
 
+async function getRenewedCombinedMetrics() {
+    const query = `
+        SELECT 
+            (SELECT GP.name
+             FROM Green_Places GP
+             JOIN Likes L ON GP.place_id = L.place_id
+             GROUP BY GP.name
+             ORDER BY COUNT(L.likes_id) DESC
+             LIMIT 1) AS most_liked_place,
+             
+            (SELECT COUNT(L.likes_id)
+             FROM Green_Places GP
+             JOIN Likes L ON GP.place_id = L.place_id
+             GROUP BY GP.name
+             ORDER BY COUNT(L.likes_id) DESC
+             LIMIT 1) AS like_count,
+
+            (SELECT GP.name
+             FROM Green_Places GP
+             JOIN Users_Profile UP ON GP.place_id = UP.visited_spots
+             GROUP BY GP.name
+             ORDER BY COUNT(UP.user_id) DESC
+             LIMIT 1) AS most_visited_place,
+             
+            (SELECT COUNT(UP.visited_spots)
+             FROM Green_Places GP
+             JOIN Users_Profile UP ON GP.place_id = UP.visited_spots
+             GROUP BY GP.name
+             ORDER BY COUNT(UP.user_id) DESC
+             LIMIT 1) AS visited_count,
+
+            (SELECT GP.name
+             FROM Green_Places GP
+             JOIN User_Recommendations UR ON GP.place_id = UR.place_id
+             GROUP BY GP.name
+             ORDER BY COUNT(UR.recommendation_id) DESC
+             LIMIT 1) AS most_recommended_place,
+             
+            (SELECT COUNT(UR.recommendation_id)
+             FROM Green_Places GP
+             JOIN User_Recommendations UR ON GP.place_id = UR.place_id
+             GROUP BY GP.name
+             ORDER BY COUNT(UR.recommendation_id) DESC
+             LIMIT 1) AS recommendation_count;
+    `;
+    const { rows } = await db.query(query);
+    return rows[0];
+};
+
 module.exports = {
     
     getMostLikedPlaces,
     getMostSavedPlaces,
     getMostRecommendedPlaces,
-    getCombinedMetrics
+    getCombinedMetrics,
+    getRenewedCombinedMetrics
 }
