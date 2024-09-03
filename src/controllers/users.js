@@ -110,4 +110,34 @@ const getSavedLocations = async (req, res) => {
   }
 };
 
-module.exports = { login, register, showStats, tokenValidation, saveLocation, getSavedLocations };
+// Controller to recommend a location to another user
+const recommendLocation = async (req, res) => {
+  try {
+    const recommender_user_id = req.user_id;  // Retrieve user_id from the request object
+    const { recommended_user_id, place_id, message } = req.body; // Get details from the request body
+
+    const recommendation = await User.recommendLocation(recommender_user_id, recommended_user_id, place_id, message);
+
+    res.status(201).json({ message: 'Location recommended successfully', recommendation });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to recommend location' });
+  }
+};
+
+// Controller to get recommendations for a user
+const getRecommendations = async (req, res) => {
+  try {
+    const user_id = req.user_id;  // Retrieve user_id from the request object
+    const recommendations = await User.getRecommendationsForUser(user_id);
+
+    res.status(200).json({ recommendations });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve recommendations' });
+  }
+};
+
+
+
+module.exports = { login, register, showStats, tokenValidation, saveLocation, 
+  getSavedLocations, recommendLocation, getRecommendations
+ };

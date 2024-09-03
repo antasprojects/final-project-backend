@@ -86,6 +86,28 @@ class User {
     `;
     await db.query(query, [user_id, place_id]);
 }
+
+  static async recommendLocation(recommender_user_id, recommended_user_id, place_id, message) {
+    const query = `
+      INSERT INTO User_Recommendations (recommender_user_id, recommended_user_id, place_id, message) 
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const result = await db.query(query, [recommender_user_id, recommended_user_id, place_id, message]);
+    return result.rows[0];
+  }
+
+    static async getRecommendationsForUser(user_id) {
+      const query = `
+        SELECT ur.*, gp.name AS place_name, u.username AS recommender_username 
+        FROM User_Recommendations ur
+        JOIN Green_Places gp ON ur.place_id = gp.place_id
+        JOIN Users u ON ur.recommender_user_id = u.user_id
+        WHERE ur.recommended_user_id = $1;
+      `;
+      const result = await db.query(query, [user_id]);
+      return result.rows;
+    }
 }
 
 module.exports = User;
