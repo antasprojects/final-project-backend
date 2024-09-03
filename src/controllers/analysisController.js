@@ -1,56 +1,27 @@
 const analysisModel = require('../models/Analysis');
 
 
-async function getMostLikedPlaces(req, res) {
+async function getUserRecommendationCounts(req, res) {
     try {
-        const data = await analysisModel.getMostLikedPlaces();
+        const data = await metricsModel.getUserRecommendationCounts();
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-async function getMostSavedPlaces(req, res) {
+async function getUserVisitCounts(req, res) {
     try {
-        const data = await analysisModel.getMostSavedPlaces();
+        const data = await metricsModel.getUserVisitCounts();
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-async function getMostRecommendedPlaces(req, res) {
-    try {
-        const data = await analysisModel.getMostRecommendedPlaces();
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+module.exports = {
 
-async function getCombinedMetrics(req, res) {
-    try {
-        const data = await analysisModel.getCombinedMetrics();
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+    getUserVisitCounts,
+    getUserRecommendationCounts
 
-async function getRenewedCombinedMetrics(req, res) {
-    try {
-        const data = await analysisModel.getRenewedCombinedMetrics();
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-module.exports ={ 
-    
-    getMostLikedPlaces,
-    getMostSavedPlaces,
-    getMostRecommendedPlaces,
-    getCombinedMetrics,
-    getRenewedCombinedMetrics
 }
