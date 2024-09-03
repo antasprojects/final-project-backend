@@ -17,7 +17,7 @@ app.use(logger)
 
 app.use("/users", usersRouter);
 app.use("/locations", locationsRouter);
-app.use('/name', interestingFactsRouter);
+//app.use('/name', interestingFactsRouter);
 
 
 
