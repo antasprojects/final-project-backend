@@ -6,6 +6,7 @@ const locationsRouter = require("./routers/locations");
 const interestingFactsRouter = require("./routers/interestingFacts");
 const journeyRoutes = require("./routers/journeyRoutes");
 const analysisRoutes = require('./routers/analysisRoutes');
+const likesRoutes = require('./routers/likes');
 
 // Log the GEMINI_API_KEY to ensure it's loaded
 console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
@@ -22,6 +23,7 @@ app.use("/locations", locationsRouter);
 app.use('/name', interestingFactsRouter);
 app.use('/journey', journeyRoutes);
 app.use('/analysis', analysisRoutes);
+app.use('/api', likesRoutes);
 
 
 
