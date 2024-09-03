@@ -3,7 +3,7 @@
 
 function getBoundaries(latitude, longitude, distance) {
 
-    console.log(latitude, longitude, distance);
+    // console.log(latitude, longitude, distance);
     const earthRadius = 6378
     const latRad = latitude * (Math.PI / 180);
     const lonRad = longitude * (Math.PI / 180);

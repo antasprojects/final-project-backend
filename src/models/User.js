@@ -87,7 +87,6 @@ class User {
     await db.query(query, [user_id, place_id]);
 }
 
-  // Method to recommend a location to another user
   static async recommendLocation(recommender_user_id, recommended_user_id, place_id, message) {
     const query = `
       INSERT INTO User_Recommendations (recommender_user_id, recommended_user_id, place_id, message) 
@@ -98,7 +97,6 @@ class User {
     return result.rows[0];
   }
 
-    // Method to get recommendations for a user
     static async getRecommendationsForUser(user_id) {
       const query = `
         SELECT ur.*, gp.name AS place_name, u.username AS recommender_username 
