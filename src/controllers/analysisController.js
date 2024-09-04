@@ -1,18 +1,21 @@
-const analysisModel = require('../models/Analysis');
+const {getRecommendationCountDB, getVisitCountDB} = require('../models/Analysis');
 
 
-async function getUserRecommendationCounts(req, res) {
+async function getRecommendationCount(req, res) {
     try {
-        const data = await analysisModel.getUserRecommendationCounts();
+        const data = await getRecommendationCountDB(req.user_id);
+
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-async function getUserVisitCounts(req, res) {
+async function getVisitCount(req, res) {
     try {
-        const data = await analysisModel.getUserVisitCounts();
+
+        const data = await getVisitCountDB(req.user_id);
+
         res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -21,7 +24,7 @@ async function getUserVisitCounts(req, res) {
 
 module.exports = {
 
-    getUserVisitCounts,
-    getUserRecommendationCounts
+    getVisitCount,
+    getRecommendationCount
 
 }

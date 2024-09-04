@@ -243,16 +243,16 @@ res =
 
 
 
-## Interesting facts
 
-## Retrieve information about a specific interesting fact by its ID DOESN NOT WORK BUT LEAVE
+
+## Retrieve information about enviromental remind about a specific interesting fact by place id
 
 GET
 localhost:3000/name/getInfoById/1
 
 req.body = none
 
-## Fetch interesting facts for a specific location based on its ID DOESNT WORK AND CRASHES THE APP
+## Fetch interesting facts for a specific location based on place_id
 
 localhost:3000/name/getFacts/:id
 
@@ -277,7 +277,7 @@ req.body =
 
 ## Likes
 
-## Like a specific place  MAKE DB FOR THAT AND STUFF
+## Like a specific place 
 
 POST
 localhost:3000/api/places/:place_id/like   
@@ -287,7 +287,7 @@ req.body =
   "user_id": 12
 }
 
-## Get the number of likes for a specific place GET DB WORKING FOR THAT
+## Get the number of likes for a specific place
 
 GET
 localhost:3000/api/places/:place_id/likes
@@ -296,14 +296,14 @@ req.body = none
 
 ## Analysis
 
-## How many locations a user has saved CHECK WITH DB AS WELL AND MAKE AUTENTICATED
+## How many locations a user has saved
 
 GET
 localhost:3000/analysis/user-visits
 
 Request Body: None
 
-## How many recommendation are made by the user CHECK WITH DB AS WELL AND MAKE AUTENTICATED
+## How many recommendation are made by the user
 
 GET
 localhost:3000/analysis/user-recommendations

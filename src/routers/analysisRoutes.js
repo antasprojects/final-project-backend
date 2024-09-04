@@ -1,12 +1,13 @@
 const { Router } = require("express");
+const authenticator = require('../middleware/authenticator');
 
-const express = require('express');
-const router = express.Router();
+
+const router = Router();
 const analysisController = require('../controllers/analysisController');
 
 
-router.get('/user-recommendations', analysisController.getUserRecommendationCounts);
-router.get('/user-visits', analysisController.getUserVisitCounts);
+router.get('/user-recommendations', authenticator, analysisController.getRecommendationCount);
+router.get('/user-visits', authenticator, analysisController.getVisitCount);
 
 
 module.exports = router;
