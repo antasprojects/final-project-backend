@@ -6,7 +6,7 @@ const Location = require('../models/Location');
 
 require('dotenv').config();
 
-const MODEL_NAME = 'gemini-1.5-pro';
+const MODEL_NAME = "gemini-1.5-flash";
 const API_KEY = process.env.GEMINI_API_KEY;
 
 // Initialize Google Generative AI client
@@ -29,7 +29,7 @@ async function fetchFacts(location) {
         do not use too fancy words if you do not have enough information in ur database make a generic believable fake one
         and do not state that you have not enough details, your description will be used on client side of nature connect app`;
 
-        console.log(prompt);
+        // console.log(prompt);
         const result = await model.generateContent({
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: {
@@ -47,7 +47,7 @@ async function fetchFacts(location) {
         });
 
         // Log the full response for debugging
-        console.log("AI Response:", JSON.stringify(result, null, 2));
+        // console.log("AI Response:", JSON.stringify(result, null, 2));
 
         // Check if candidates exist and extract the content
         if (result.response && result.response.candidates && result.response.candidates.length > 0) {
@@ -73,11 +73,11 @@ async function getFacts(req, res) {
     }
 
     try {
-        console.log(`Fetching facts for location: ${location.name}`);
+        // console.log(`Fetching facts for location: ${location.name}`);
 
         // Fetch facts using the AI model
         const facts = await fetchFacts(location);
-        console.log(`Facts fetched: ${facts}`);
+        // console.log(`Facts fetched: ${facts}`);
 
          // Temporarily skip database 
          //const newFact = {
@@ -97,10 +97,12 @@ async function getFacts(req, res) {
     }
 }
 async function getInfoById(req, res) {
-  console.log(req);
 
    try {
+        const searchId = parseInt(req.params.id);
+
        const location = await Location.getOneById(searchId)
+
        
 
        const searchResult = await InterestingFact.getOneById(location.tag_id);
