@@ -128,6 +128,7 @@ const recommendLocation = async (req, res) => {
   }
 };
 
+
 // Controller to get recommendations for a user
 const getRecommendations = async (req, res) => {
   try {
