@@ -90,6 +90,7 @@ const tokenValidation = (req, res) => {
 // Controller to save a location
 const saveLocation = async (req, res) => {
   try {
+
       const user_id = req.user_id; // Retrieve user_id from the request object
       const { place_id } = req.body; // Get place_id from the request body
       await User.saveLocation(user_id, place_id);
@@ -113,6 +114,9 @@ const getSavedLocations = async (req, res) => {
 // Controller to recommend a location to another user
 const recommendLocation = async (req, res) => {
   try {
+      // username = req.username
+      //here will be functioning 
+      // user_id = user.finduseridbyusername
     const recommender_user_id = req.user_id;  // Retrieve user_id from the request object
     const { recommended_user_id, place_id, message } = req.body; // Get details from the request body
 
