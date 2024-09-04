@@ -1,6 +1,5 @@
 // controllers/interestingFacts.js
 
-
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const InterestingFact = require('../models/InterestingFact');
 const Location = require('../models/Location');
@@ -101,7 +100,10 @@ async function getInfoById(req, res) {
   const searchId = req.params.id;
 
    try {
-       const searchResult = await InterestingFact.getOneById(searchId);
+       const location = await Location.getOneById(searchId)
+       
+
+       const searchResult = await InterestingFact.getOneById(location.tag_id);
        res.json(searchResult);
    } catch (error) {
        res.status(404).json({ error: 'No information found for this ID' });
