@@ -137,6 +137,21 @@ class Location {
         throw new Error("Error adding location description: " + err.message);
     }
   }
+
+  static async getSaveCount(place_id) {
+    const query = `
+      SELECT COUNT(*) AS save_count
+      FROM Saved_places
+      WHERE place_id = $1;
+    `;
+    const result = await db.query(query, [place_id]);
+
+    if (result.rows.length === 0) {
+      throw new Error("No records found for this place.");
+    }
+
+    return result.rows[0].save_count; // Return the count
+  }
 }
 
 module.exports = Location;

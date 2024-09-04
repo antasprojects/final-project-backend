@@ -178,6 +178,21 @@ async function showDescription(req, res) {
 
 }
 
+// Controller to get the save count for a specific place
+const getPlaceMetrics = async (req, res) => {
+  try {
+    const { place_id } = req.params; // Extract place_id from the URL
+    const saveCount = await Location.getSaveCount(place_id);
+
+    res.status(200).json({
+      place_id: place_id,
+      save_count: saveCount,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve metrics' });
+  }
+};
+
 
 
 
@@ -189,5 +204,6 @@ module.exports = {
   showWeather,
   showFiltered,
   showRecommendations,
-  showDescription
+  showDescription,
+  getPlaceMetrics
 };
