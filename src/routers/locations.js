@@ -12,7 +12,10 @@ locationsRouter.get("/weather/:id", locationsController.showWeather);
 locationsRouter.post("/filter", locationsController.showFiltered);
 locationsRouter.post("/recommendations", locationsController.showRecommendations);
 
-// New route to get metrics for a location
+// New route to get metrics for a location (save count)
 locationsRouter.get("/metrics/:place_id", locationsController.getPlaceMetrics);
+
+// New route to get recommendation metrics for a location
+locationsRouter.get("/recommendation-metrics/:place_id", locationsController.getRecommendationMetrics);
 
 module.exports = locationsRouter;

@@ -193,6 +193,20 @@ const getPlaceMetrics = async (req, res) => {
   }
 };
 
+// Controller to get the recommendation count for a specific place
+const getRecommendationMetrics = async (req, res) => {
+  try {
+    const { place_id } = req.params; // Extract place_id from the URL
+    const recommendationCount = await Location.getRecommendationCount(place_id);
+
+    res.status(200).json({
+      place_id: place_id,
+      recommendation_count: recommendationCount,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve recommendation metrics' });
+  }
+};
 
 
 
@@ -205,5 +219,6 @@ module.exports = {
   showFiltered,
   showRecommendations,
   showDescription,
-  getPlaceMetrics
+  getPlaceMetrics,
+  getRecommendationMetrics
 };
