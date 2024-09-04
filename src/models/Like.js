@@ -98,7 +98,7 @@ class Like {
     static async countLikesByPlaceId(placeId) {
         console.log(`Counting likes for place ID: ${placeId}`);
         const query = `
-            SELECT COUNT(*) AS like_count
+            SELECT like_count
             FROM likes
             WHERE place_id = $1 ;
         `;

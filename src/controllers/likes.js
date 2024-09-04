@@ -17,12 +17,13 @@ async function likeLocation(req, res) {
 }
 
 async function getLikesByPlace(req, res) {
-    const { place_id } = req.params;
+    const place_id = req.params.id;
 
     console.log(`Received request to get likes for place ${place_id}`);
 
     try {
         const likeCount = await Like.countLikesByPlaceId(place_id);
+        
         console.log(`Successfully retrieved like count: ${likeCount}`);
         return res.status(200).json({ place_id, like_count: likeCount });
     } catch (error) {
