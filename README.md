@@ -163,12 +163,23 @@ res =
 ## Get a count for metrics on how many times a Specific Place was saved (Liliia)
 
 GET
-localhost:3000/locations/metrics/1
+localhost:3000/locations/metrics/:place_id
 
 res = 
 {
   "place_id": "1",
   "save_count": "5"
+}
+
+## Get a count for how many times a Specific Place was recommended (Liliia)
+
+GET
+localhost:3000/locations/recommendation-metrics/:place_id
+
+res =
+{
+  "place_id": "1",
+  "recommendation_count": "3"
 }
 
 
@@ -301,3 +312,4 @@ localhost:3000/analysis/user-recommendations
 
 Request Body: None
 
+//
