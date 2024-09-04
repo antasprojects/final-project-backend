@@ -184,11 +184,10 @@ res =
 
 
 
-## Gives reccomendations sorted by rating in 20 km radius FIX THIS
+## Gives reccomendations sorted by rating in 20 km radius
 
 POST
-localhost:3000/locations/recomendations
-
+localhost:3000/locations/recommendations
 req.body =
 {
   "user_location": {
@@ -202,14 +201,14 @@ res =
   "recommendations": [location1, location2]
 }
 
-## Recommend a Location to Another User CHANGE TO ACCEPTE USERNAME
+## Recommend a Location to Another User by username 
 POST
 localhost:3000/users/recommend
 
 req.body =
 {
-  "recommended_user_id": 13,
-  "place_id": 1,
+  "username": "antek",
+  "place_id": 3,
   "message": "You should check out this park!"
 }
 
