@@ -184,7 +184,7 @@ res =
 
 
 
-## Gives reccomendations sorted by rating in 20 km radius
+## Gives reccomendations sorted by rating in 20 km radius FIX THIS
 
 POST
 localhost:3000/locations/recomendations
@@ -202,7 +202,7 @@ res =
   "recommendations": [location1, location2]
 }
 
-## Recommend a Location to Another User
+## Recommend a Location to Another User CHANGE TO ACCEPTE USERNAME
 POST
 localhost:3000/users/recommend
 
@@ -229,7 +229,6 @@ res =
 }
 
 ## Get Recommendations for a User
-
 GET
 authenticated route
 localhost:3000/users/recommendations
@@ -247,14 +246,14 @@ res =
 
 ## Interesting facts
 
-## Retrieve information about a specific interesting fact by its ID
+## Retrieve information about a specific interesting fact by its ID DOESN NOT WORK BUT LEAVE
 
 GET
 localhost:3000/name/getInfoById/1
 
 req.body = none
 
-## Fetch interesting facts for a specific location based on its ID
+## Fetch interesting facts for a specific location based on its ID DOESNT WORK AND CRASHES THE APP
 
 localhost:3000/name/getFacts/:id
 
@@ -265,7 +264,7 @@ req.body =
 
 ## Journey
 
-## Get journey directions between two locations
+## Get journey directions between two locations WORKS but check if works with different body
 
 POST
 localhost:3000/journey/directions"
@@ -279,17 +278,17 @@ req.body =
 
 ## Likes
 
-## Like a specific place
+## Like a specific place  MAKE DB FOR THAT AND STUFF
 
 POST
-localhost:3000/api/places/:place_id/like
+localhost:3000/api/places/:place_id/like   
 
 req.body =
  {
   "user_id": 12
 }
 
-## Get the number of likes for a specific place
+## Get the number of likes for a specific place GET DB WORKING FOR THAT
 
 GET
 localhost:3000/api/places/:place_id/likes
@@ -298,14 +297,14 @@ req.body = none
 
 ## Analysis
 
-## How many locations a user has saved
+## How many locations a user has saved CHECK WITH DB AS WELL AND MAKE AUTENTICATED
 
 GET
 localhost:3000/analysis/user-visits
 
 Request Body: None
 
-## How many recommendation are made by the user
+## How many recommendation are made by the user CHECK WITH DB AS WELL AND MAKE AUTENTICATED
 
 GET
 localhost:3000/analysis/user-recommendations
