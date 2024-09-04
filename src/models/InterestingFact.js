@@ -12,7 +12,6 @@ class InterestingFact {
     static async getOneById(id) {
         const response = await db.query("SELECT * FROM environmental_reminders WHERE tag_id = $1 ORDER BY RANDOM() LIMIT 1;", [id]);
 
-        console.log(response.rows[0]);
 
         if (response.rows.length !== 1) {
             throw new Error("Unable to locate reminder.");
