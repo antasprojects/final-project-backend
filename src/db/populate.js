@@ -96,17 +96,14 @@ async function getDetails(place_id) {
 async function putIntoDB(result, tag_id) {
     if (result.business_status === 'OPERATIONAL') {
 
+        const checkQuery = `
+        SELECT * FROM Green_Places WHERE name = $1;`;
+
+
         const query = `
             INSERT INTO Green_Places (name, location_type, latitude, longitude, address, rating, googleid, tag_id)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            ON CONFLICT (name) DO UPDATE
-                   SET location_type = EXCLUDED.location_type,
-                latitude = EXCLUDED.latitude,
-                longitude = EXCLUDED.longitude,
-                address = EXCLUDED.address,
-                rating = EXCLUDED.rating,
-                googleid = EXCLUDED.googleid,
-                tag_id = EXCLUDED.tag_id;`;
+            ON CONFLICT (name) DO NOTHING;`
 
             const values = [
             result.name,
@@ -120,8 +117,15 @@ async function putIntoDB(result, tag_id) {
         ];
 
         try {
-            await db.query(query, values);
-            console.log(`${result.name} data inserted successfully`);
+            const checkResult = await db.query(checkQuery, [result.name]);
+            const length = checkResult.rows.length
+
+            if (length >= 1) {
+                console.log(`Record with name '${result.name}' already exists. Skipping insertion.`);
+            } else {
+                await db.query(query, values);
+                console.log(`${result.name} data inserted successfully`);
+            }
 
         } catch (error) {
             console.error('Error inserting data into the database:', error);
@@ -130,10 +134,6 @@ async function putIntoDB(result, tag_id) {
 }
 
 async function populate() {
-
-
-
-
 
 
     const pageLimit = 1;
@@ -145,14 +145,17 @@ async function populate() {
             let nextPageToken = '';
             let hasNextPage = true;
             let pageCount = 0;
-            console.log(tags[j]);
 
             while (hasNextPage && pageCount < pageLimit) {
 
                 const data = await fetchPlacesFromGoogle(tags[j], nextPageToken);
 
+
                 for (let i = 0; i < data.results.length; i++) {
-                    await putIntoDB(data.results[i], j + 1);
+
+                    if(data.results[i].user_ratings_total > 50){
+                        await putIntoDB(data.results[i], j + 1);
+                    }
                 }
 
                 if (data.next_page_token) {
@@ -172,6 +175,8 @@ async function populate() {
 }
 
 
-populate()
+if (require.main === module) {
+    populate();
+}
 
-module.exports = { populate };
+module.exports = { populate, getPhotoUrl };
