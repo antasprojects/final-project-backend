@@ -97,7 +97,7 @@ async function getFacts(req, res) {
     }
 }
 async function getInfoById(req, res) {
-  const searchId = req.params.id;
+  console.log(req);
 
    try {
        const location = await Location.getOneById(searchId)

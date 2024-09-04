@@ -2,14 +2,13 @@ const Like = require('../models/Like');
 
 
 async function likeLocation(req, res) {
-    const { user_id } = req.body;
-    const { place_id } = req.params;
+    const place_id = req.params.id;
 
-    console.log(`Received request to like place ${place_id} by user ${user_id}`);
+    console.log(place_id);
+
 
     try {
-        const like = await Like.createLike(user_id, place_id);
-        console.log(`Successfully created like:`, like);
+        const like = await Like.addLike(place_id);
         return res.status(200).json({ message: 'Location liked successfully', like });
     } catch (error) {
         console.error('Error adding like:', error);
@@ -32,7 +31,26 @@ async function getLikesByPlace(req, res) {
     }
 }
 
+
+async function removeLike(req, res) {
+    const place_id = req.params.id;
+
+    console.log(place_id);
+
+
+    try {
+        const like = await Like.removeLike(place_id);
+        return res.status(200).json({ message: 'Location unliked successfully', like });
+    } catch (error) {
+        console.error('Error adding like:', error);
+        return res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+}
+
+
+
 module.exports = {
     likeLocation,
     getLikesByPlace,
+    removeLike
 };
