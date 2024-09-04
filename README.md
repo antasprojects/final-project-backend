@@ -298,40 +298,18 @@ req.body = none
 
 ## Analysis
 
-## Retrieve the most liked places
+## How many locations a user has saved
 
 GET
-localhost:3000/analysis/most-liked
+localhost:3000/analysis/user-visits
 
 Request Body: None
 
-## Retrieve the most saved places
+## How many recommendation are made by the user
 
 GET
-localhost:3000/analysis/most-saved
+localhost:3000/analysis/user-recommendations
 
 Request Body: None
-
-## Retrieve the most recommended places
-
-GET
-localhost:3000/analysis/most-recommended
-
-Request Body: None
-
-## Combined metrics of places
-
-GET
-localhost:3000/analysis/combined-metrics
-
-Request Body: None
-
-## Top combined metrics
-
-GET
-localhost:3000/analysis/renewed-combined-metrics
-
-will add changes later
 
 //
-

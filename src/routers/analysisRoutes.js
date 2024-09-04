@@ -5,11 +5,8 @@ const router = express.Router();
 const analysisController = require('../controllers/analysisController');
 
 
-router.get('/most-liked', analysisController.getMostLikedPlaces);
-router.get('/most-saved', analysisController.getMostSavedPlaces);
-router.get('/most-recommended', analysisController.getMostRecommendedPlaces);
-router.get('/combined-metrics', analysisController.getCombinedMetrics);
-router.get('/renewed-combined-metrics', analysisController.getRenewedCombinedMetrics);
+router.get('/user-recommendations', analysisController.getUserRecommendationCounts);
+router.get('/user-visits', analysisController.getUserVisitCounts);
 
 
 module.exports = router;
