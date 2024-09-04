@@ -146,7 +146,7 @@ async function fetchDescription(location) {
         });
 
         // Log the full response for debugging
-        console.log("AI Response:", JSON.stringify(result, null, 2));
+        // console.log("AI Response:", JSON.stringify(result, null, 2));
 
         // Check if candidates exist and extract the content
         if (result.response && result.response.candidates && result.response.candidates.length > 0) {
