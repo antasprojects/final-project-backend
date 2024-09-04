@@ -187,8 +187,7 @@ res =
 ## Gives reccomendations sorted by rating in 20 km radius
 
 POST
-localhost:3000/locations/recomendations
-
+localhost:3000/locations/recommendations
 req.body =
 {
   "user_location": {
@@ -202,14 +201,14 @@ res =
   "recommendations": [location1, location2]
 }
 
-## Recommend a Location to Another User
+## Recommend a Location to Another User by username 
 POST
 localhost:3000/users/recommend
 
 req.body =
 {
-  "recommended_user_id": 13,
-  "place_id": 1,
+  "username": "antek",
+  "place_id": 3,
   "message": "You should check out this park!"
 }
 
@@ -229,7 +228,6 @@ res =
 }
 
 ## Get Recommendations for a User
-
 GET
 authenticated route
 localhost:3000/users/recommendations
@@ -245,16 +243,16 @@ res =
 
 
 
-## Interesting facts
 
-## Retrieve information about a specific interesting fact by its ID
+
+## Retrieve information about enviromental remind about a specific interesting fact by place id
 
 GET
 localhost:3000/name/getInfoById/1
 
 req.body = none
 
-## Fetch interesting facts for a specific location based on its ID
+## Fetch interesting facts for a specific location based on place_id
 
 localhost:3000/name/getFacts/:id
 
@@ -265,7 +263,7 @@ req.body =
 
 ## Journey
 
-## Get journey directions between two locations
+## Get journey directions between two locations WORKS but check if works with different body
 
 POST
 localhost:3000/journey/directions"
@@ -279,10 +277,10 @@ req.body =
 
 ## Likes
 
-## Like a specific place
+## Like a specific place 
 
 POST
-localhost:3000/api/places/:place_id/like
+localhost:3000/api/places/:place_id/like   
 
 req.body =
  {

@@ -114,14 +114,16 @@ const getSavedLocations = async (req, res) => {
 // Controller to recommend a location to another user
 const recommendLocation = async (req, res) => {
   try {
-      // username = req.username
-      //here will be functioning 
-      // user_id = user.finduseridbyusername
-    const recommender_user_id = req.user_id;  // Retrieve user_id from the request object
-    const { recommended_user_id, place_id, message } = req.body; // Get details from the request body
 
-    const recommendation = await User.recommendLocation(recommender_user_id, recommended_user_id, place_id, message);
+    const recommender_user_id = req.user_id
 
+    const { username, place_id, message } = req.body; // Get details from the request body
+
+    const user = await User.findByUsername(username)
+
+    const recommendation = await User.recommendLocation(recommender_user_id, user.user_id, place_id, message);
+
+    console.log(recommendation);
     res.status(201).json({ message: 'Location recommended successfully', recommendation });
   } catch (err) {
     res.status(500).json({ error: 'Failed to recommend location' });

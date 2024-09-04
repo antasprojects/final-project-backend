@@ -10,13 +10,15 @@ class InterestingFact {
 
 
     static async getOneById(id) {
-        const response = await db.query("SELECT * FROM interesting_facts WHERE fact_id = $1;", [id]);
+        const response = await db.query("SELECT * FROM environmental_reminders WHERE tag_id = $1 ORDER BY RANDOM() LIMIT 1;", [id]);
+
+        console.log(response.rows[0]);
 
         if (response.rows.length !== 1) {
-            throw new Error("Unable to locate fact.");
+            throw new Error("Unable to locate reminder.");
         }
 
-        return new InterestingFact(response.rows[0]);
+        return response.rows[0]
     }
 
 

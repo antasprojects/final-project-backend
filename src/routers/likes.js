@@ -1,12 +1,11 @@
 
 const { Router } = require("express");
-const express = require('express');
-const { likeLocation, getLikesByPlace } = require('../controllers/likes');
+const likesController = require('../controllers/likes');
 
-const router = express.Router();
+const router = Router();
 
 module.exports = router;
 
-
-router.post('/places/:place_id/like', likeLocation);
-router.get('/places/:place_id/likes', getLikesByPlace);
+router.get('/places/:id/like', likesController.likeLocation);
+router.get('/places/:id/likes', likesController.getLikesByPlace);
+router.get('/places/:id/dislike',likesController.removeLike);
