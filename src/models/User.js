@@ -127,17 +127,3 @@ class User {
 
 module.exports = User;
 
-
-/*
-    static async getRecommendationsForUser(user_id) {
-      const query = `
-        SELECT ur.*, gp.name AS place_name, u.username AS recommender_username 
-        FROM User_Recommendations ur
-        JOIN Green_Places gp ON ur.place_id = gp.place_id
-        JOIN Users u ON ur.recommender_user_id = u.user_id
-        WHERE ur.recommended_user_id = $1;
-      `;
-      const result = await db.query(query, [user_id]);
-      return result.rows;
-    }
-    */

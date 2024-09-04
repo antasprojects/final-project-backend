@@ -150,7 +150,7 @@ class Location {
       throw new Error("No records found for this place.");
     }
 
-    return result.rows[0].save_count; // Return the count
+    return result.rows[0].save_count; 
   }
 }
 

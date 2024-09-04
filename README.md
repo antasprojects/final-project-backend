@@ -52,12 +52,12 @@ authenticated route
 localhost:3000/users/save
 
 headers: {
-        'Authorization': "TOKEN" ,
+        'Authorization': Bearer <TOKEN> ,
     }
 
 req.body =
 {
-  "place_id": 2
+  "place_id": 1
 }
 
 res =
@@ -72,7 +72,7 @@ authenticated route
 localhost:3000/users/retrieve
 
 headers: {
-        'Authorization': "TOKEN" ,
+        'Authorization': Bearer <TOKEN> ,
     }
 
 res =
@@ -160,6 +160,19 @@ req.body =
 res =
 [location1, location2]
 
+## Get a count for metrics on how many times a Specific Place was saved (Liliia)
+
+GET
+localhost:3000/locations/metrics/1
+
+res = 
+{
+  "place_id": "1",
+  "save_count": "5"
+}
+
+
+
 ## Gives reccomendations sorted by rating in 20 km radius
 
 POST
@@ -177,6 +190,49 @@ res =
 {
   "recommendations": [location1, location2]
 }
+
+## Recommend a Location to Another User
+POST
+localhost:3000/users/recommend
+
+req.body =
+{
+  "recommended_user_id": 13,
+  "place_id": 1,
+  "message": "You should check out this park!"
+}
+
+res =
+{
+  "message": "Location recommended successfully",
+  "recommendation": {
+    "recommendation_id": 20,
+    "recommender_user_id": 17,
+    "recommended_user_id": 13,
+    "place_id": 1,
+    "message": "Check this park!",
+    "created_at": "2024-09-04T08:12:16.299Z",
+    "recommender_username": "yourUserngme",
+    "recommended_username": "wanda_maximoff"
+  }
+}
+
+## Get Recommendations for a User
+
+GET
+authenticated route
+localhost:3000/users/recommendations
+
+headers: {
+        'Authorization': Bearer <TOKEN> ,
+    }
+
+res =
+{
+  "recommendations": []    //will be a empty string unless logged in as a recommended_user
+}
+
+
 
 ## Interesting facts
 
@@ -265,3 +321,5 @@ GET
 localhost:3000/analysis/renewed-combined-metrics
 
 will add changes later
+
+
