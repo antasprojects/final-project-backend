@@ -21,11 +21,15 @@ async function populateImg() {
             if (!result.rows[i].image_url){
                 const res = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(result.rows[i].name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
                 const data = await res.json();
-                const imageUrls = data.items.map(item => item.link);
-
-                await Location.addImageUrl(imageUrls, i + 1)
-                console.log(`added images for ${result.rows[i].name}`);
-
+            
+                if (data.items && Array.isArray(data.items)) {
+                    const imageUrls = data.items.map(item => item.link);
+                    
+                    await Location.addImageUrl(imageUrls, i + 1);
+                    console.log(`Added images for ${result.rows[i].name}`);
+                } else {
+                    console.error(`No image items found for ${result.rows[i].name}:`, data);
+                }
             }
 
 
