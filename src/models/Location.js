@@ -152,6 +152,22 @@ class Location {
 
     return result.rows[0].save_count; 
   }
+
+  // New method to count how many times a place has been recommended
+  static async getRecommendationCount(place_id) {
+    const query = `
+      SELECT COUNT(*) AS recommendation_count
+      FROM User_Recommendations
+      WHERE place_id = $1;
+    `;
+    const result = await db.query(query, [place_id]);
+
+    if (result.rows.length === 0) {
+        throw new Error("No records found for this place.");
+    }
+
+    return result.rows[0].recommendation_count;
+}
 }
 
 module.exports = Location;
