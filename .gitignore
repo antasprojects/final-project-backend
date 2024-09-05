@@ -6,3 +6,6 @@ terraform.tfstate.*
 *.tfplan
 .terraform/
 default-ec2.pem
+/src/db/
+/docker
+/coverage
