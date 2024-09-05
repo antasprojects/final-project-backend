@@ -13,8 +13,7 @@ async function populateDescription() {
         const query = 'SELECT * FROM green_places;';
         const result = await db.query(query);
 
-        const limit = 5
-        const adjusted_limit = Math.min(limit, result.rows.length)
+        const adjusted_limit = result.rows.length
     
     for (let i = 0; i < adjusted_limit; i++){
         if (!result.rows[i].description){
@@ -23,8 +22,10 @@ async function populateDescription() {
 
             const description = await fetchDescription(location)
 
+
             await Location.addDescription(description, i + 1)
             console.log(`added description for ${result.rows[i].name}`);
+            await new Promise(resolve => setTimeout(resolve, 4000))
 
         }
 
