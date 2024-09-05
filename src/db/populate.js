@@ -19,7 +19,7 @@ async function fetchPlacesFromGoogle(tag, nextPageToken = '') {
 
     const latitude = 51.5074;
     const longitude = -0.1278;
-    const radius = 50000
+    const radius = 200
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&keyword=${encodeURIComponent(tag)}&key=${process.env.GOOGLE_MAPS_API_KEY}${nextPageToken ? `&pagetoken=${nextPageToken}` : ''}`;
     try {
@@ -136,7 +136,7 @@ async function putIntoDB(result, tag_id) {
 async function populate() {
 
 
-    const pageLimit = 1;
+    const pageLimit = 2;
     try {
 
         const tags = ['Woods', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
