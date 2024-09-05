@@ -119,7 +119,7 @@ async function fetchDescription(location) {
 
         const tags = ['Woods', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
 
-        const prompt = `Summarize the most interesting facts about the following "green place" in 2-3 sentences:
+        const prompt = `Summarize the most interesting facts about the following "green place" in 2 sentences:
         - Name: ${location.name}
         - Type: ${location.location_type}
         - Address: ${location.address}
