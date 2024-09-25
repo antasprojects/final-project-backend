@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "http_server" {
-  ami = "ami-066784287e358dad1" // put the ami here
+  ami = "ami-066784287e358dad1"
   key_name = "default-ec2"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_server_sg.id]
@@ -26,7 +26,7 @@ resource "aws_instance" "http_server" {
 }
 
 resource "aws_s3_bucket" "my_s3_bucket" {
-  bucket = "s3-bucket-final-project-logs-antoniszczekot"
+  bucket = "s3-bucket-final-project-logs-antoniszczekot-2"
 }
 
 variable "aws_key_pair" {
