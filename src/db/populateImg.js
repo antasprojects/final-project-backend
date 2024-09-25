@@ -13,12 +13,12 @@ async function populateImg() {
         const query = 'SELECT * FROM green_places;';
         const result = await db.query(query);
 
-        const limit = 5
 
-        const adjusted_limit = Math.min(limit, result.rows.length)
+        const adjusted_limit = result.rows.length
 
         for (let i = 0; i < adjusted_limit; i++){
             if (!result.rows[i].image_url){
+                console.log(result.rows[i].name);
                 const res = await fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(result.rows[i].name)}&searchType=image&key=${process.env.GOOGLE_MAPS_API_KEY}&cx=44bf1ef33a330462e`);
                 const data = await res.json();
             
@@ -26,6 +26,7 @@ async function populateImg() {
                     const imageUrls = data.items.map(item => item.link);
                     
                     await Location.addImageUrl(imageUrls, i + 1);
+                    await new Promise(resolve => setTimeout(resolve, 1000))
                     console.log(`Added images for ${result.rows[i].name}`);
                 } else {
                     console.error(`No image items found for ${result.rows[i].name}:`, data);

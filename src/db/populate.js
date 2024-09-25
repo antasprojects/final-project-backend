@@ -19,7 +19,7 @@ async function fetchPlacesFromGoogle(tag, nextPageToken = '') {
 
     const latitude = 51.5074;
     const longitude = -0.1278;
-    const radius = 50000
+    const radius = 200000
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&keyword=${encodeURIComponent(tag)}&key=${process.env.GOOGLE_MAPS_API_KEY}${nextPageToken ? `&pagetoken=${nextPageToken}` : ''}`;
     try {
@@ -96,13 +96,15 @@ async function getDetails(place_id) {
 async function putIntoDB(result, tag_id) {
     if (result.business_status === 'OPERATIONAL') {
 
+        console.log(result.name);
         const checkQuery = `
         SELECT * FROM Green_Places WHERE name = $1;`;
 
+        const tags = ['Woodlands', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
 
         const query = `
-            INSERT INTO Green_Places (name, location_type, latitude, longitude, address, rating, googleid, tag_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            INSERT INTO Green_Places (name, location_type, latitude, longitude, address, rating, googleid, tag_id, tag_name)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             ON CONFLICT (name) DO NOTHING;`
 
             const values = [
@@ -114,6 +116,7 @@ async function putIntoDB(result, tag_id) {
             result.rating,
             result.place_id,
             tag_id,
+            tags[tag_id - 1]
         ];
 
         try {
@@ -139,7 +142,7 @@ async function populate() {
     const pageLimit = 1;
     try {
 
-        const tags = ['Woods', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
+        const tags = ['Forest', 'Hiking', 'Park', 'Garden', 'Historic', 'Beach', 'Camping', 'Wildlife', 'Farm', 'Rivers']
 
         for (let j = 0; j < tags.length; j++) {
             let nextPageToken = '';
@@ -149,7 +152,6 @@ async function populate() {
             while (hasNextPage && pageCount < pageLimit) {
 
                 const data = await fetchPlacesFromGoogle(tags[j], nextPageToken);
-
 
                 for (let i = 0; i < data.results.length; i++) {
 
