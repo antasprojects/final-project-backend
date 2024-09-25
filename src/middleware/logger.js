@@ -3,7 +3,7 @@ const AWS = require("aws-sdk")
 
 
 const s3 = new AWS.S3()
-const BUCKET_NAME = "s3-bucket-final-project-logs-antoniszczekot"
+const BUCKET_NAME = 's3-bucket-final-project-logs-antoniszczekot-2'
 
 const logger = async (req, res, next) => {
     const dateObj = new Date()
